@@ -2,12 +2,11 @@ package com.example.flow.controller;
 
 import com.example.flow.service.ExtensionService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
-@RestController
+@Controller
 @RequestMapping("api/v1/extension")
 @RequiredArgsConstructor
 public class ExtensionController {
@@ -16,5 +15,10 @@ public class ExtensionController {
     @PostMapping("/{extensionId}")
     public void changeChecked(@PathVariable Long extensionId) {
         extensionService.changeChecked(extensionId);
+    }
+
+    @GetMapping()
+    public String extension(Model model) {
+        return "form/extension";
     }
 }
