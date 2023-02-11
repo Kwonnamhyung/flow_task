@@ -1,11 +1,18 @@
 package com.example.flow.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class CustomExtension {
 
     @Id
@@ -14,6 +21,10 @@ public class CustomExtension {
 
     private String name;
 
-    private boolean isChecked;
 
+    public static CustomExtension toEntity(CustomExtensionDTO request) {
+        return CustomExtension.builder()
+                .name(request.getName())
+                .build();
+    }
 }

@@ -4,6 +4,12 @@
   <meta charset="UTF-8">
   <title>Title</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <style>
+    .field-error{
+      border-color: #dc3545;
+      color: #dc3545;
+    }
+  </style>
   <script>
     function getCheckboxValue(event)  {
       let result = '';
@@ -33,6 +39,18 @@
       <label th:text="${extension.name}"></label>
     </span>
   </p>
+</div>
+<div>
+  <form th:action="@{/api/v1/extension/customExtension}" method="post" th:object="${customExtensionDTO}">
+    커스텀 확장자
+    <span style="padding-left: 10px">
+      <input type="text" th:field="*{name}" maxlength="20" style="width: 250px; border-radius: 5px; border-color: #C5C5C5" placeholder="확장자 입력">
+      <button type="submit" style="color: white; background-color: #AAAAAA ; border-radius: 5px; border-color: #C5C5C5" >+추가</button>
+    </span>
+    <div th:if="${#fields.hasGlobalErrors()}">
+      <p class="field-error" style="padding-left: 105px; margin-top: -1px; text-" th:if="${#fields.hasGlobalErrors()}" th:each="err:${#fields.globalErrors()}" th:text="${err}">전체 오류 메시지</p>
+    </div>
+  </form>
 </div>
 </body>
 </html>
