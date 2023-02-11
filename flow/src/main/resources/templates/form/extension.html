@@ -9,6 +9,8 @@
       border-color: #dc3545;
       color: #dc3545;
     }
+    .btn__close {display:inline-block;}
+    .btn__close:after {display: inline-block; content: "\00d7"; font-size:17px; margin-left:5px; margin-top: 3px; margin-right: 2px;}
   </style>
   <script>
     function getCheckboxValue(event)  {
@@ -21,6 +23,23 @@
         data_type : "text",
         data : {
           "result" : result
+        }
+      })
+    }
+
+    function getCustomExtensionValue(event) {
+      let result = '';
+      result = event.target.name;
+
+      $.ajax({
+        type :"GET" ,
+        url : "http://localhost:8080/api/v1/extension/customExtension",
+        data_type : "text",
+        data : {
+          "result" : result
+        },
+        success : function (data) {
+          location.reload();
         }
       })
     }
@@ -48,9 +67,19 @@
       <button type="submit" style="color: white; background-color: #AAAAAA ; border-radius: 5px; border-color: #C5C5C5" >+추가</button>
     </span>
     <div th:if="${#fields.hasGlobalErrors()}">
-      <p class="field-error" style="padding-left: 105px; margin-top: -1px; text-" th:if="${#fields.hasGlobalErrors()}" th:each="err:${#fields.globalErrors()}" th:text="${err}">전체 오류 메시지</p>
+      <p class="field-error" style="padding-left: 105px; margin-top: -1px;" th:if="${#fields.hasGlobalErrors()}" th:each="err:${#fields.globalErrors()}" th:text="${err}">전체 오류 메시지</p>
     </div>
   </form>
+</div>
+<div style="margin-left: 100px; margin-top: 5px; border: 1px solid #C5C5C5; border-radius: 5px; width: 400px; height: 200px" th:object="${customExtensionList}">
+  <span style="font-size: 12px; padding: 3px; margin-left: 2px;" th:text="${customExtensionList.size()}"></span><span style="font-size: 12px;">/200</span>
+  <br>
+  <span th:each="customExtension : ${customExtensionList}">
+    <div style="height:20px;font-size: 12px; margin-left: 8px; display:inline-block; padding-left:10px; align-items: center; text-align: center; border: 1px solid #C5C5C5; border-radius: 5px;">
+      <p style="float: left; font-size: 12px; position: relative; bottom:9px;" th:text="${customExtension.getName()}"></p>
+      <button th:name="${customExtension.getName()}" type="button" style=" float: left; font-size: 25px; border: none; background-color: transparent; padding-left: 10px; position: relative; bottom: 5px; display: inline-block;" onclick="getCustomExtensionValue(event)">&#215;</button>
+    </div>
+  </span>
 </div>
 </body>
 </html>

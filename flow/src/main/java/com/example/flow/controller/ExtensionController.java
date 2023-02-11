@@ -1,5 +1,6 @@
 package com.example.flow.controller;
 
+import com.example.flow.domain.CustomExtension;
 import com.example.flow.domain.CustomExtensionDTO;
 import com.example.flow.domain.Extension;
 import com.example.flow.service.CustomExtensionService;
@@ -9,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,13 +21,14 @@ import java.util.List;
 public class ExtensionController {
 
     private final ExtensionService extensionService;
-    private final CustomExtensionService createCustomExtension;
+    private final CustomExtensionService customExtensionService;
 
     @GetMapping()
     public String extension(Model model) {
         System.out.println("ExtensionController.extension");
 
         addAttributeExtension(model);
+        addAttributeCustomExtension(model);
         model.addAttribute("customExtensionDTO" , new CustomExtensionDTO());
         return "form/extension";
 
@@ -38,6 +39,7 @@ public class ExtensionController {
         extensionService.changeChecked(name);
 
         addAttributeExtension(model);
+        addAttributeCustomExtension(model);
 
         return "form/extension";
     }
@@ -45,9 +47,10 @@ public class ExtensionController {
     @PostMapping("customExtension")
     public String createCustomExtension(@ModelAttribute CustomExtensionDTO customExtensionDTO , BindingResult bindingResult , Model model){
 
-        createCustomExtension.createCustomExtension(customExtensionDTO , bindingResult);
+        customExtensionService.createCustomExtension(customExtensionDTO , bindingResult);
         if(bindingResult.hasErrors()){
             addAttributeExtension(model);
+            addAttributeCustomExtension(model);
             model.addAttribute("customExtensionDTO" , customExtensionDTO);
             return "form/extension";
         }
@@ -55,9 +58,20 @@ public class ExtensionController {
         return "redirect:";
     }
 
+    @GetMapping("customExtension")
+    public String deleteCustomExtension(@RequestParam(value="result")String name , Model model){
+        customExtensionService.deleteCustomExtension(name);
+        return "redirect:";
+    }
+
     private void addAttributeExtension(Model model) {
         List<Extension> extensionList = extensionService.getExtensionList();
 
         model.addAttribute("extensionList" , extensionList);
+    }
+
+    private void addAttributeCustomExtension(Model model) {
+        List<CustomExtension> customExtensionList = customExtensionService.getCustomExtensionList();
+        model.addAttribute("customExtensionList" , customExtensionList);
     }
 }

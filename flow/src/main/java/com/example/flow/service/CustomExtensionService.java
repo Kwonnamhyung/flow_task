@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 
+import javax.transaction.Transactional;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CustomExtensionService {
@@ -31,5 +34,14 @@ public class CustomExtensionService {
             customExtensionRepository.save(customExtension);
         }
 
+    }
+
+    public List<CustomExtension> getCustomExtensionList() {
+        return customExtensionRepository.findAll();
+    }
+
+    @Transactional
+    public void deleteCustomExtension(String name) {
+        customExtensionRepository.deleteByName(name);
     }
 }
