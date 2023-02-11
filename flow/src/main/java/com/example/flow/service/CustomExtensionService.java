@@ -30,8 +30,13 @@ public class CustomExtensionService {
         if(exists) {
             bindingResult.addError(new ObjectError("name","이미 등록된 확장자 입니다."));
         }else {
-            CustomExtension customExtension = CustomExtension.toEntity(request);
-            customExtensionRepository.save(customExtension);
+            int size = customExtensionRepository.findAll().size();
+            if(size == 200){
+                bindingResult.addError(new ObjectError("name","커스텀 확장자는 최대 200개까지만 추가 가능합니다."));
+            }else{
+                CustomExtension customExtension = CustomExtension.toEntity(request);
+                customExtensionRepository.save(customExtension);
+            }
         }
 
     }
